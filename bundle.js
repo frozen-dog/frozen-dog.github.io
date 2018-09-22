@@ -110,7 +110,7 @@ NexT.utils = NexT.$u = {
     var THRESHOLD = 50;
     var $top = $('.back-to-top');
 
-    $(window).on('scroll', function() {
+    function initBackToTop() {
       $top.toggleClass('back-to-top-on', window.pageYOffset > THRESHOLD);
 
       var scrollTop = $(window).scrollTop();
@@ -119,6 +119,15 @@ NexT.utils = NexT.$u = {
       var scrollPercentRounded = Math.round(scrollPercent * 100);
       var scrollPercentMaxed = scrollPercentRounded > 100 ? 100 : scrollPercentRounded;
       $('#scrollpercent>span').html(scrollPercentMaxed);
+    }
+
+    // For init back to top in sidebar if page was already scrolled.
+    $(document).ready(function() {
+      initBackToTop();
+    });
+
+    $(window).on('scroll', function() {
+      initBackToTop();
     });
 
     $top.on('click', function() {
@@ -508,7 +517,7 @@ $(document).ready(function() {
       this.sidebarEl.trigger('sidebar.isHiding');
 
       // Prevent adding TOC to Overview if Overview was selected when close & open sidebar.
-      if (!$('.post-toc-wrap')) {
+      if ($('.post-toc-wrap')) {
         if ($('.site-overview-wrap').css('display') === 'block') {
           $('.post-toc-wrap').removeClass('motion-element');
         } else {
